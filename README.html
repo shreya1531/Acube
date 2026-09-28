@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><title>A Cube Project CMS — README</title></head>
+<body style="font-family:Arial;max-width:900px;margin:40px auto;line-height:1.6;color:#252725">
+<h1>A Cube Design Studio — Project CMS</h1>
+
+<h2>Site map / how the pages connect</h2>
+<ul>
+<li><b>index.html</b> — public homepage. The Projects section is populated live from Supabase (published projects only) and links each card to <code>project.html?id=...</code>. Footer links to <code>admin-login.html</code>.</li>
+<li><b>project.html</b> — public project detail page, driven entirely by the <code>id</code> query param. Its own header links back to <code>index.html</code> and its in-page sections.</li>
+<li><b>admin-login.html</b> — sign-in gate. Redirects straight to <code>admin.html</code> if a session already exists; links back to <code>index.html</code> via "Back".</li>
+<li><b>admin.html</b> — dashboard (requires an authenticated Supabase session; redirects to <code>admin-login.html</code> otherwise). Lists projects with Edit and Delete, plus gallery thumbnail management. Links out to <code>admin-add-project.html</code> and <code>admin-edit-project.html?id=...</code>.</li>
+<li><b>admin-add-project.html</b> / <b>admin-edit-project.html</b> — project forms (also session-gated); both return to <code>admin.html</code> on save or cancel.</li>
+<li><b>setup.html</b> — one-time Supabase SQL/setup reference; links to <code>admin-login.html</code> and <code>index.html</code>.</li>
+<li><b>404.html</b> — fallback page for any URL that doesn't resolve (e.g. a deleted project link); links back to <code>index.html</code>. Point your host's custom-404 setting at this file.</li>
+<li><b>robots.txt</b> / <b>sitemap.xml</b> — crawling rules and the sitemap entry for search engines; admin/setup pages are disallowed and marked <code>noindex</code>.</li>
+</ul>
+
+<h2>Admin session security</h2>
+<ul>
+<li>Every admin page checks the Supabase session on load and redirects to <code>admin-login.html</code> if it's missing.</li>
+<li>Logging in/out and the guard redirect use <code>location.replace()</code> (not <code>location.href</code>), so the dashboard doesn't stay in browser history after logout.</li>
+<li>Admin pages also listen for the <code>pageshow</code> event and force a reload if the page was restored from the back/forward cache — so pressing Back after Logout re-checks the session instead of showing a stale cached dashboard.</li>
+</ul>
+
+<h2>SEO &amp; mobile</h2>
+<ul>
+<li><code>index.html</code> and <code>project.html</code> carry meta description, canonical link, Open Graph and Twitter Card tags, and <code>robots: index, follow</code>. <code>project.html</code> updates these dynamically (title, description, image, canonical URL) once the specific project loads.</li>
+<li>Admin, login and setup pages are marked <code>robots: noindex, nofollow</code> so they don't show up in search results.</li>
+<li>All pages share a small inline SVG favicon and a <code>theme-color</code> meta tag for mobile browser chrome.</li>
+<li><code>robots.txt</code> points crawlers at <code>sitemap.xml</code> and blocks the admin/setup pages. <b>Replace the placeholder domain (<code>https://www.acubedesignstudio.com</code>) in <code>robots.txt</code>, <code>sitemap.xml</code>, and the canonical/og:url tags with your real production domain once deployed.</b></li>
+<li>Every page already has a responsive <code>viewport</code> meta tag and mobile breakpoints (<code>@media(max-width:900px/600px/520px)</code>) — no changes needed there.</li>
+</ul>
+
+<h2>Deploying</h2>
+<ol>
+<li>Run the SQL in <code>setup.html</code> against your Supabase project and create an admin user under Authentication → Users.</li>
+<li>Upload this whole folder as-is to any static host (Netlify, Vercel, GitHub Pages, S3, etc.) — every internal link is a relative path (<code>index.html</code>, <code>project.html</code>, <code>admin.html</code> …), so nothing needs rewriting for a subfolder or custom domain.</li>
+<li>Point your host's "custom 404" setting at <code>404.html</code> if it supports one.</li>
+<li>Update the placeholder domain in <code>robots.txt</code>, <code>sitemap.xml</code> and the <code>&lt;meta&gt;</code>/<code>&lt;link&gt;</code> SEO tags in <code>index.html</code>/<code>project.html</code> to your real domain.</li>
+</ol>
+
+<h2>Content behaviour</h2>
+<ul>
+<li>Add/Edit project requires a Project Name; a Main Image is required for a new project.</li>
+<li>Gallery images show immediate previews with an × button before saving/publishing.</li>
+<li>The admin dashboard shows the published month (e.g. "Sep 2026"), not the exact date.</li>
+<li>The public Projects grid on the homepage is a fixed 3-per-row layout (2 on tablet, 1 on mobile); photos use <code>object-fit: contain</code> so they're never cropped, and each card shows the location, name, month, and short description.</li>
+<li>Project detail gallery uses three images per row on desktop and one per row on mobile.</li>
+</ul>
+</body></html>

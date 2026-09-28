@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Replace https://www.acubedesignstudio.com with your real production domain
+  once deployed.
+
+  index.html is listed here as a static page. Individual project pages
+  (project.html?id=...) are generated at runtime from Supabase and can't be
+  enumerated at build time from a plain static file — search engines will
+  still discover and index them by following the links on index.html, since
+  robots.txt allows crawling of project.html. If you want every project URL
+  listed explicitly, regenerate this file from the `projects` table whenever
+  you publish a new project (a small script can query Supabase for
+  `id, updated_at` and append a <url> block per row).
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.acubedesignstudio.com/index.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

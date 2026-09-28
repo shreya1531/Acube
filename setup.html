@@ -1,0 +1,126 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Crect%20width%3D%27100%27%20height%3D%27100%27%20rx%3D%2720%27%20fill%3D%27%23087e96%27/%3E%3Ctext%20x%3D%2750%27%20y%3D%2771%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2758%27%20fill%3D%27%23f6f1e8%27%20text-anchor%3D%27middle%27%3EA%3C/text%3E%3C/svg%3E"><title>A Cube CMS Setup</title>
+<style>body{font-family:Arial,sans-serif;max-width:1000px;margin:40px auto;padding:0 20px;line-height:1.6;color:#252725}pre{background:#f5f3ed;padding:20px;overflow:auto;border:1px solid #ddd}code{font-family:monospace}</style></head><body>
+<h1>A Cube Design Studio — Supabase Setup</h1>
+<p><b>Storage bucket:</b> <code>project-images</code></p>
+<h2>Run this SQL in Supabase SQL Editor</h2>
+<pre>
+create extension if not exists pgcrypto;
+
+create table if not exists public.projects (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  slug text unique not null,
+  category text,
+  location text,
+  short_description text,
+  description text,
+  main_image text,
+  display_order integer default 0,
+  is_published boolean default true,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now(),
+  published_at timestamptz
+);
+
+create table if not exists public.project_images (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.projects(id) on delete cascade,
+  image_url text not null,
+  alt_text text,
+  caption text,
+  display_order integer default 0,
+  created_at timestamptz default now()
+);
+
+create index if not exists projects_display_order_idx on public.projects(display_order);
+create index if not exists projects_published_idx on public.projects(is_published);
+create index if not exists project_images_project_id_idx on public.project_images(project_id);
+
+alter table public.projects add column if not exists published_at timestamptz;
+
+insert into storage.buckets (id, name, public)
+values ('project-images', 'project-images', true)
+on conflict (id) do nothing;
+
+alter table public.projects enable row level security;
+alter table public.project_images enable row level security;
+
+drop policy if exists "Public can view published projects" on public.projects;
+create policy "Public can view published projects"
+on public.projects for select
+using (is_published = true or auth.role() = 'authenticated');
+
+drop policy if exists "Authenticated users can insert projects" on public.projects;
+create policy "Authenticated users can insert projects"
+on public.projects for insert
+to authenticated
+with check (true);
+
+drop policy if exists "Authenticated users can update projects" on public.projects;
+create policy "Authenticated users can update projects"
+on public.projects for update
+to authenticated
+using (true) with check (true);
+
+drop policy if exists "Authenticated users can delete projects" on public.projects;
+create policy "Authenticated users can delete projects"
+on public.projects for delete
+to authenticated
+using (true);
+
+drop policy if exists "Public can view project images" on public.project_images;
+create policy "Public can view project images"
+on public.project_images for select
+using (
+  exists (
+    select 1 from public.projects p
+    where p.id = project_id and (p.is_published = true or auth.role() = 'authenticated')
+  )
+);
+
+drop policy if exists "Authenticated users can insert project images" on public.project_images;
+create policy "Authenticated users can insert project images"
+on public.project_images for insert
+to authenticated
+with check (true);
+
+drop policy if exists "Authenticated users can update project images" on public.project_images;
+create policy "Authenticated users can update project images"
+on public.project_images for update
+to authenticated
+using (true) with check (true);
+
+drop policy if exists "Authenticated users can delete project images" on public.project_images;
+create policy "Authenticated users can delete project images"
+on public.project_images for delete
+to authenticated
+using (true);
+
+drop policy if exists "Public can view project storage" on storage.objects;
+create policy "Public can view project storage"
+on storage.objects for select
+using (bucket_id = 'project-images');
+
+drop policy if exists "Authenticated users can upload project storage" on storage.objects;
+create policy "Authenticated users can upload project storage"
+on storage.objects for insert
+to authenticated
+with check (bucket_id = 'project-images');
+
+drop policy if exists "Authenticated users can update project storage" on storage.objects;
+create policy "Authenticated users can update project storage"
+on storage.objects for update
+to authenticated
+using (bucket_id = 'project-images')
+with check (bucket_id = 'project-images');
+
+drop policy if exists "Authenticated users can delete project storage" on storage.objects;
+create policy "Authenticated users can delete project storage"
+on storage.objects for delete
+to authenticated
+using (bucket_id = 'project-images');
+</pre>
+<h2>Admin account</h2>
+<p>Create the admin email/password in <b>Supabase → Authentication → Users</b>. The login page requires both email and password.</p>
+<p><a href="admin-login.html">← Go to Admin Login</a> &nbsp;·&nbsp; <a href="index.html">View the live site</a></p>
+</body></html>
