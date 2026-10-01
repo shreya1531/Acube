@@ -155,7 +155,7 @@ footer{background:#202523;color:var(--cream);padding:58px 10vw 22px;margin-top:5
 </style></head><body class="admin-clean-body">
 <main class="admin-page"><div class="admin-head"><div><div class="eyebrow">A Cube Admin</div><h1>Project <em>Dashboard</em></h1></div><div class="actions"><a class="btn primary" href="admin-add-project.html">+ New Project</a><button class="btn" onclick="logout()">Logout</button></div></div>
 <div class="stats"><div class="stat"><b id="total">0</b><span>Total Projects</span></div><div class="stat"><b id="published">0</b><span>Published</span></div><div class="stat"><b id="drafts">0</b><span>Drafts</span></div></div>
-<div class="panel"><div id="msg" class="message" style="display:none"></div><div style="overflow:auto"><table class="project-table"><thead><tr><th>Preview</th><th>Project</th><th>Category</th><th>Gallery</th><th>Published Month</th><th>Status</th><th>Actions</th></tr></thead><tbody id="rows"></tbody></table></div></div></main>
+<div class="panel"><div id="msg" class="message" style="display:none"></div><div style="overflow:auto"><table class="project-table"><thead><tr><th>Preview</th><th>Project</th><th>Category</th><th>Gallery</th><th>Project Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="rows"></tbody></table></div></div></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 const db=supabase.createClient("https://wixaatcfvycalzfoheyn.supabase.co","sb_publishable_3w5sC7ayULa77QG203kgTQ_flCqh5wJ");
 let allGalleryImages=[];
@@ -166,8 +166,10 @@ async function guard(){const {data}=await db.auth.getSession();if(!data.session)
 window.addEventListener("pageshow",e=>{if(e.persisted)location.reload()});
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function publishedMonth(p){
+ const M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+ if(p.project_date){const [y,m]=p.project_date.split("-").map(Number);return M[m-1]+" "+y}
  const d=new Date(p.published_at || p.created_at);
- return d.toLocaleDateString("en-US",{month:"short",year:"numeric"});
+ return M[d.getMonth()]+" "+d.getFullYear();
 }
 function storagePath(url){
  try{
@@ -206,7 +208,7 @@ async function load(){
      <td><strong>${esc(p.name)}</strong><br><span style="font-size:9px;color:var(--muted)">${esc(p.location||"")}</span></td>
      <td>${esc(p.category||"—")}</td>
      <td>${thumbs}</td>
-     <td>${p.is_published?publishedMonth(p):"—"}</td>
+     <td>${publishedMonth(p)}</td>
      <td><span class="status ${p.is_published?"":"draft"}">${p.is_published?"Published":"Draft"}</span></td>
      <td><div class="actions"><a class="btn" href="admin-edit-project.html?id=${p.id}">Edit</a><button class="btn danger" onclick="del('${p.id}')">Delete</button></div></td>
    </tr>`;

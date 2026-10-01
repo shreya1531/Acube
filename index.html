@@ -445,6 +445,25 @@ footer p{font-size:8px;letter-spacing:.18em;color:#d8b58d}
   .projects-v3 .projects-head{margin-bottom:48px}
 }
 
+
+/* SERVICES ACCORDION (What we do) */
+.services .acc{display:flex;gap:14px;height:min(72vh,620px);min-height:460px}
+.services .panel{position:relative;flex:1;min-width:0;overflow:hidden;color:#fff;cursor:pointer;transition:flex 1s cubic-bezier(.2,.8,.2,1);background:linear-gradient(135deg,var(--teal),var(--ink))}
+.services .panel.open,.services .panel:hover{flex:2.6}
+.services .acc:hover .panel:not(:hover){flex:1}
+.services .panel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.4s}
+.services .panel:hover img,.services .panel.open img{transform:scale(1.08)}
+.services .panel:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(9,30,36,.88),rgba(9,30,36,.05) 65%)}
+.services .panel-in{position:absolute;z-index:1;left:24px;right:24px;bottom:26px}
+.services .panel h3{font-family:var(--serif);font-weight:500;margin:0;font-size:clamp(28px,2.7vw,40px)}
+.services .panel p{max-height:0;opacity:0;overflow:hidden;line-height:1.7;max-width:420px;transition:max-height .8s,opacity .8s .2s,margin .8s;font-size:15px;color:#e6eded;margin:0}
+.services .panel:hover p,.services .panel.open p{max-height:120px;opacity:1;margin-top:14px}
+.services .panel .no{position:absolute;z-index:1;top:22px;left:24px;font-size:13px;font-weight:700;letter-spacing:.12em}
+@media(max-width:900px){
+  .services .acc{flex-direction:column;height:auto}
+  .services .panel{min-height:150px}.services .panel.open{min-height:360px}
+  .services .panel:hover{flex:1}.services .panel p{max-height:0}.services .panel.open p{max-height:140px;opacity:1;margin-top:14px}
+}
 </style>
 </head>
 <body>
@@ -487,10 +506,10 @@ footer p{font-size:8px;letter-spacing:.18em;color:#d8b58d}
 
     <div class="hero-visual-v3">
       <div class="hero-main-image">
-        <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=88" alt="Contemporary warm residential interior">
+        <img src="assets/project-images/01-elevation-3-1.jpeg" alt="Contemporary warm residential interior">
       </div>
       <div class="hero-inset">
-        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=700&q=88" alt="Contemporary home exterior">
+        <img src="assets/project-images/02-mr-ravindra-option-01.jpeg" alt="Contemporary home exterior">
         <span>01 — RESIDENTIAL</span>
       </div>
       <div class="hero-vertical">FORM · LIGHT · MATERIAL</div>
@@ -523,26 +542,7 @@ footer p{font-size:8px;letter-spacing:.18em;color:#d8b58d}
       <p>Architecture and interiors considered together, from the first sketch to the final detail.</p>
     </div>
 
-    <div class="service-grid">
-      <article>
-        <div class="service-top"><span>01</span><span>↗</span></div>
-        <div class="service-icon arch-icon"></div>
-        <h3>Architecture</h3>
-        <p>Residential and commercial architecture, planning, elevations and design consultancy.</p>
-      </article>
-      <article>
-        <div class="service-top"><span>02</span><span>↗</span></div>
-        <div class="service-icon interior-icon"></div>
-        <h3>Interiors</h3>
-        <p>Warm, functional interiors with thoughtful spatial planning, materials, lighting and finishes.</p>
-      </article>
-      <article>
-        <div class="service-top"><span>03</span><span>↗</span></div>
-        <div class="service-icon consult-icon"></div>
-        <h3>Consultancy</h3>
-        <p>Concept development, visualisation, renovation guidance and design direction.</p>
-      </article>
-    </div>
+    <div class="acc"><article class="panel open"><img src="assets/site/service-architecture.jpg" alt="Architecture" loading="lazy" onerror="this.style.display='none'"><span class="no">01</span><div class="panel-in"><h3>Architecture</h3><p>Residential and commercial architecture, planning, elevations and design consultancy.</p></div></article><article class="panel"><img src="assets/site/service-interiors.jpg" alt="Interiors" loading="lazy" onerror="this.style.display='none'"><span class="no">02</span><div class="panel-in"><h3>Interiors</h3><p>Warm, functional interiors with thoughtful spatial planning, materials, lighting and finishes.</p></div></article><article class="panel"><img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80" alt="Consultancy" loading="lazy" onerror="this.style.display='none'"><span class="no">03</span><div class="panel-in"><h3>Consultancy</h3><p>Concept development, visualisation, renovation guidance and design direction.</p></div></article></div>
   </section>
 
   <!-- APPROACH -->
@@ -562,7 +562,7 @@ footer p{font-size:8px;letter-spacing:.18em;color:#d8b58d}
   <!-- STUDIO -->
   <section class="studio" id="studio">
     <div class="studio-image">
-      <img src="https://eagledecor.in/_astro/hero.CdCXVbBD_2nJzMB.webp" alt="Interior design">
+      <img src="assets/site/studio-good-design.jpg" alt="Contemporary home exterior">
       <div class="studio-overlay">A CUBE<br>DESIGN<br>STUDIO</div>
     </div>
     <div class="studio-copy">
@@ -582,7 +582,7 @@ footer p{font-size:8px;letter-spacing:.18em;color:#d8b58d}
     <div class="section-head">
       <div>
         <div class="eyebrow">Recent work</div>
-        <h2>@a_cube_design_<br><em>projects</em></h2>
+        <h2>Our recent<br><em>projects</em></h2>
       </div>
       <a class="underlink" href="https://www.instagram.com/a_cube_design_projects/" target="_blank">Follow on Instagram <span>↗</span></a>
     </div>
@@ -684,27 +684,36 @@ const acubeSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }[m]));
   }
 
-  function monthYear(dateStr){
-    const d = dateStr ? new Date(dateStr) : null;
-    if(!d || isNaN(d)) return "";
-    return d.toLocaleDateString("en-US",{month:"short",year:"numeric"});
+  // Month + year as entered by the admin (projects.project_date = YYYY-MM-DD).
+  // Falls back to the publish/created time only for older rows with no date.
+  function monthYear(p){
+    const M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    if(p.project_date){
+      const [y,m]=String(p.project_date).split("-").map(Number);
+      return (m>=1&&m<=12&&y)?M[m-1]+" "+y:"";
+    }
+    const d=new Date(p.published_at||p.created_at);
+    return isNaN(d)?"":M[d.getMonth()]+" "+d.getFullYear();
   }
 
   function renderGrid(data){
-    grid.innerHTML = data.map(p=>`
+    grid.innerHTML = data.map((p)=>{
+      const localImage = p.main_image || "";
+      return `
         <a class="plive-card" href="project.html?id=${encodeURIComponent(p.id)}">
           <div class="plive-photo">
             ${p.location ? `<span class="plive-badge">${escapeHtml(p.location)}</span>` : ""}
-            <img src="${p.main_image || ""}" alt="${escapeHtml(p.name || "Project")}" loading="lazy">
+            ${localImage ? `<img src="${localImage}" alt="${escapeHtml(p.name || "Project")}" loading="lazy">` : ""}
           </div>
           <div class="plive-body">
             <div class="plive-info">
               <h3>${escapeHtml(p.name || "")}</h3>
-              <span>${escapeHtml(monthYear(p.created_at))}</span>
+              <span>${escapeHtml(monthYear(p))}</span>
             </div>
             ${p.short_description ? `<p class="plive-desc">${escapeHtml(p.short_description)}</p>` : ""}
           </div>
-        </a>`).join("");
+        </a>`;
+    }).join("");
   }
 
   // No blank space when there's nothing to show: the whole section, including
@@ -735,5 +744,60 @@ const acubeSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 </script>
 
 <script>window.addEventListener('DOMContentLoaded',function(){let id;try{id=sessionStorage.getItem('acube-scroll-target');sessionStorage.removeItem('acube-scroll-target')}catch(_){}if(id){history.replaceState(null,'',location.pathname+location.search);document.getElementById(id)?.scrollIntoView({behavior:'smooth'});}});document.addEventListener('click',function(e){const a=e.target.closest('a[data-scroll]');if(!a)return;const id=a.dataset.scroll;const target=document.getElementById(id);if(target){e.preventDefault();history.replaceState(null,'',location.pathname+location.search);target.scrollIntoView({behavior:'smooth',block:'start'});}});</script>
+<style>
+/* Readability: larger, darker text across the whole site */
+:root{--muted:#2b2e2b;--teal-dk:#056178}
+body{color:#1b1d1b}
+/* paragraphs */
+p{color:#2b2e2b}
+.hero-copy-v3>p,.hero-left>p{font-size:17px;line-height:1.8;color:#232623;max-width:440px}
+.intro-copy,.intro-copy p{font-size:17px;line-height:1.85;color:#232623}
+.section-head>p{font-size:16px;line-height:1.75;color:#232623;max-width:400px}
+.studio-copy>p{font-size:17px;color:#232623}
+.projects-intro p{font-size:15px;color:#232623}
+.plive-desc{font-size:15px;line-height:1.7;color:#232623;-webkit-line-clamp:3}
+.process p{font-size:15px;color:rgba(255,255,255,.96);max-width:240px}
+.contact-copy>p{font-size:17px;color:rgba(255,255,255,.94)}
+.services .panel p{font-size:16px;color:#fff}
+/* eyebrows, labels, small caps text */
+.eyebrow,.hero-kicker{font-size:12px;letter-spacing:.2em;color:var(--teal-dk);font-weight:700}
+.approach .eyebrow,.contact .eyebrow{color:#f0cfa6}
+.section-label,.service-top,.project-info strong,.project-info-v3 small{font-size:12px;color:#8a3a20;font-weight:600}
+.underlink,.view{font-size:12px;font-weight:600;color:#1b1d1b}
+.view{color:#fff}
+.header nav a,.header-button,.footer-nav a{font-size:12px;font-weight:500;color:#1b1d1b}
+.footer-nav a{color:#f6f1e8}
+.mobile-nav a{font-size:13px;color:#1b1d1b}
+.hero-meta,.hero-caption{font-size:11px}
+.hero-meta{color:#4a4740}
+.hero-footer-note{font-size:11px;color:#4a4740}
+.hero-vertical{font-size:11px;color:#3f3c36}
+.hero-inset span{font-size:11px;color:#2b2e2b}
+.hero-primary,.hero-secondary{font-size:12px;font-weight:600}
+.project-overlay span{font-size:11px}
+.project-info p,.project-info-v3 p{font-size:12px;color:#2b2e2b}
+.values div{font-size:14px;color:#1b1d1b}
+.values span{color:#8a3a20}
+.studio-overlay{font-size:13px}
+.process span{font-size:12px;color:#f0cfa6}
+.contact-meta{font-size:12px;color:#f0cfa6}
+.contact label{font-size:12px;color:#f0cfa6}
+.contact input,.contact textarea,.contact select{font-size:15px}
+.contact button{font-size:12px;font-weight:600;color:#fff;border-color:#f0cfa6}
+footer p{font-size:11px;color:#f0cfa6}
+.copyright{font-size:11px;color:#d3d6d3}
+.admin-access-link{font-size:11px;color:#d3d6d3}
+/* project cards (database-driven) */
+.plive-info h3{font-size:24px}
+.plive-info span{font-size:11px;color:#8a3a20;font-weight:600}
+.plive-badge{font-size:10px}
+</style>
+<script>
+(function(){var acc=document.querySelector('.services .acc');if(!acc)return;
+var panels=acc.querySelectorAll('.panel');
+panels.forEach(function(p){p.addEventListener('click',function(){panels.forEach(function(x){x.classList.remove('open')});p.classList.add('open')})});
+acc.addEventListener('mouseenter',function(){if(window.matchMedia('(min-width:901px)').matches)panels.forEach(function(x){x.classList.remove('open')})});
+})();
+</script>
 </body>
 </html>

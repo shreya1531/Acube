@@ -53,6 +53,7 @@ footer{background:#202523;color:var(--cream);padding:58px 10vw 22px;margin-top:5
 <div class="form-grid">
 <div class="field full"><label>Project Name <span class="required">*</span></label><input id="name" required></div>
 <div class="field"><label>Category</label><input id="category" placeholder="Residential"></div><div class="field"><label>Location</label><input id="location" placeholder="Ballari, Karnataka"></div>
+<div class="field"><label>Project Date (Month &amp; Year) <span class="required">*</span></label><div style="display:grid;grid-template-columns:1.3fr 1fr;gap:10px"><select id="pMonth" aria-label="Month"></select><select id="pYear" aria-label="Year"></select></div></div>
 <div class="field full"><label>Short Description</label><textarea id="short_description" style="min-height:90px"></textarea></div>
 <div class="field full"><label>Full Description</label><textarea id="description"></textarea></div>
 <div class="field full">
@@ -82,6 +83,18 @@ footer{background:#202523;color:var(--cream);padding:58px 10vw 22px;margin-top:5
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 const db=supabase.createClient("https://wixaatcfvycalzfoheyn.supabase.co","sb_publishable_3w5sC7ayULa77QG203kgTQ_flCqh5wJ"),editId=new URLSearchParams(location.search).get("id");
 let galleryQueue=[],existingImages=[],mainFileObj=null,existingMainUrl=null,wasPublished=false;
+// ---- Project date (month + year chosen by admin; stored as YYYY-MM-01 in projects.project_date) ----
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function initDatePicker(y,m){
+  const now=new Date(), cy=now.getFullYear();
+  pMonth.innerHTML=MONTHS.map((n,i)=>`<option value="${i+1}">${n}</option>`).join("");
+  let years=[];for(let i=cy+1;i>=cy-30;i--)years.push(i);
+  if(y&&!years.includes(y))years.push(y);
+  pYear.innerHTML=years.sort((a,b)=>b-a).map(v=>`<option value="${v}">${v}</option>`).join("");
+  pMonth.value=String(m||now.getMonth()+1);pYear.value=String(y||cy);
+}
+function getProjectDate(){return `${pYear.value}-${String(pMonth.value).padStart(2,"0")}-01`}
+
 // "name" and "location" clash with the browser's built-in window.name / window.location,
 // so we grab these two fields explicitly instead of relying on the id-as-global shortcut.
 const nameInput=document.getElementById("name"),locationInput=document.getElementById("location");
@@ -177,6 +190,13 @@ async function load(){
   locationInput.value=p.location||"";
   short_description.value=p.short_description||"";
   description.value=p.description||"";
+  {
+    const src=p.project_date||p.published_at||p.created_at;
+    let y,m;
+    if(p.project_date){[y,m]=p.project_date.split("-").map(Number)}
+    else if(src){const d=new Date(src);y=d.getFullYear();m=d.getMonth()+1}
+    initDatePicker(y,m);
+  }
   published.checked=!!p.is_published;
   wasPublished=!!p.is_published;
   existingMainUrl=p.main_image||null;
@@ -206,6 +226,7 @@ async function save(){
       short_description:short_description.value.trim()||null,
       description:description.value.trim()||null,
       main_image:mainUrl,
+      project_date:getProjectDate(),
       is_published:isPublished,
       updated_at:new Date().toISOString()
     };

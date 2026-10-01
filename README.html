@@ -42,7 +42,7 @@
 <ul>
 <li>Add/Edit project requires a Project Name; a Main Image is required for a new project.</li>
 <li>Gallery images show immediate previews with an × button before saving/publishing.</li>
-<li>The admin dashboard shows the published month (e.g. "Sep 2026"), not the exact date.</li>
+<li>Each project has a Project Date (month and year) chosen by the admin in the Add/Edit form. It is shown on the homepage cards and in the admin dashboard (e.g. "Sep 2026"). Run <code>add_project_date.sql</code> once in Supabase before using it.</li>
 <li>The public Projects grid on the homepage is a fixed 3-per-row layout (2 on tablet, 1 on mobile); photos use <code>object-fit: contain</code> so they're never cropped, and each card shows the location, name, month, and short description.</li>
 <li>Project detail gallery uses three images per row on desktop and one per row on mobile.</li>
 </ul>
